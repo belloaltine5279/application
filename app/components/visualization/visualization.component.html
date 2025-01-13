@@ -1,0 +1,211 @@
+<h1>Visualisation des données</h1>
+
+<h2>Liste des données</h2>
+<!--affichage des données data de la json sur le site -->
+
+<!--<ul>-->
+<!--  <li *ngFor="let item of data">{{ item }}</li>-->
+<!--</ul>-->
+
+
+<!-- visualization.component.html -->
+<!--
+  <div *ngIf="data.length > 0; else loading">
+    <h2>List of Universities</h2>
+    
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Country</th>
+          <th>Web Pages</th>
+          <th>Domains</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let university of data">
+          <td>{{ university.name }}</td>
+          <td>{{ university.country }}</td>
+          <td>
+            <a *ngFor="let webPage of university.web_pages" [href]="webPage" target="_blank">
+              {{ webPage }}
+            </a>
+          </td>
+          <td>{{ university.domains.join(', ') }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+-->
+  <!-- Template pour afficher pendant le chargement -->
+   <!--
+    <ng-template #loading>
+      <p>Loading universities...</p>
+    </ng-template>
+    -->
+    <!--
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th>latitude</th> 
+              <th>longitude</th>
+              <th>generationtime_ms</th>
+              <th>ufc_offset_seconds</th>
+              <th>timezone</th>
+              <th>timezone_abbreviation</th>
+              <th>elevation</th>
+              <th>hourly_unit</th>
+              <th>hourly</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let elem of data">
+              <td>{{ elem.latitude }}</td>
+              <td>{{ elem.longitude }}</td>
+              <td>{{ elem.generationtime_ms }}</td>
+              <td>{{ elem.ufc_offset_seconds }}</td>
+              <td>{{ elem.timezone }}</td>
+              <td>{{ elem.timezone_abbreviation }}</td>
+              <td>{{ elem.elevation }}</td>
+              <td *ngFor="let el of elem.hourly_unit">{{ el.time }} , {{ el.temperature_2m }}</td>
+              <td *ngFor="let v of elem.hourly"> {{ v.time }} , {{ v.temperature_2m }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      -->
+     <div>
+      <div>
+        <input [(ngModel)]="searchQuery" (input)="onSearch()" placeholder="Nom de la ville">
+        <button (click)="onSearch()">Recherche</button>
+      </div>
+      
+      <!-- Liste des suggestions -->
+      <ul *ngIf="filteredCities.length > 0">
+        <li *ngFor="let city of filteredCities" (click)="onCitySelect(city)">
+          {{ city.ville }}
+        </li>
+      </ul>
+      
+      <!-- Affichage des données météo pour la ville sélectionnée -->
+      <div *ngIf="selectedCity" class="card">
+        <!-- <h3>Météo pour {{ selectedCity.ville }}</h3>
+        <p>Numéro station: {{ selectedCity.numerostation }}</p>
+        <p>Latitude: {{ selectedCity.lat }}</p>
+        <p>Longitude: {{ selectedCity.long }}</p>
+        <p>Température: {{ weatherData?.temperature }}</p>
+        <p>Humidité: {{ weatherData?.humidity }}</p>
+      </div>       -->
+      <div class="card-container">
+        <div *ngIf="selectedCity" class="card">
+          <div class="card-header">
+            <h2>{{ selectedCity.ville }}</h2>
+          </div>
+          <div class="card-body">
+            <p>Station Number: {{ selectedCity.numerostation }}</p>
+            <p>Longitude: {{ selectedCity.long }}</p>
+            <p>Latitude: {{ selectedCity.lat }}</p>
+      
+            <!-- Affichage des données météo -->
+            <ng-container *ngIf="getWeatherData(city.numerostation)">
+              <div class="weather-info">
+                <p>Temperature: {{ getWeatherData(selectedCity.numerostation).temperature }}°C</p>
+                <p>Humidity: {{ getWeatherData(selectedCity.numerostation).humidity }}%</p>
+              </div>
+            </ng-container>
+          </div>
+          <div class="card-footer">
+            <button (click)="viewDetails(selectedCity)">Voir plus</button>
+          </div>
+        </div>
+      </div>
+
+</div>
+
+
+     <!-- <div class="card-container">
+      <div *ngFor="let city of cities" class="card">
+        <div class="card-header">
+          <h2>{{ city.ville }}</h2>
+        </div>
+        <div class="card-body">
+          <p>Station Number: {{ city.numerostation }}</p>
+          <p>Longitude: {{ city.long }}</p>
+          <p>Latitude: {{ city.lat }}</p>
+    
+          <ng-container *ngIf="getWeatherData(city.numerostation)">
+            <div class="weather-info">
+              <p>Temperature: {{ getWeatherData(city.numerostation).temperature }}°C</p>
+              <p>Humidity: {{ getWeatherData(city.numerostation).humidity }}%</p>
+            </div>
+          </ng-container>
+        </div>
+        <div class="card-footer">
+          <button (click)="viewDetails(city)">Voir plus</button>
+        </div>
+      </div>
+    </div> -->
+   
+  <div>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>NUMER_STA</th>
+          <th>date</th>
+          <th>pmer</th>
+          <th>tend</th>
+          <th>cod_tend</th>
+          <th>dd</th>
+          <th>ff</th>
+          <th>t</th> 
+          <th>td</th>
+          <th>u</th>
+          <th>vv</th> 
+          <th>ww</th> 
+          <th>n</th> 
+          <th>nbas</th> 
+          <th>pres</th>
+          <th>tend24</th>
+          <th>tn12</th>
+          <th>tx12</th>
+          <th>tminsol</th>
+          <th>raf10</th>
+          <th>rafper</th>
+          <th>per</th>
+          <th>rr12</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let elem of data">
+            <td>{{ elem.id }}</td>
+            <td>{{ elem.numer_sta }}</td>
+            <td>{{ elem.date }}</td>
+            <td>{{ elem.pmer }}</td>
+            <td>{{ elem.tend }}</td>
+            <td>{{ elem.cod_tend }}</td>
+            <td>{{ elem.ff }}</td>
+            <td>{{ elem.t }}</td>
+            <td>{{ elem.u }}</td>
+            <td>{{ elem.vv }}</td>
+            <td>{{ elem.ww }}</td>
+            <td>{{ elem.n }}</td>
+            <td>{{ elem.nbas }}</td>
+            <td>{{ elem.hbas }}</td>
+            <td>{{ elem.pres }}</td>
+            <td>{{ elem.tend24 }}</td>
+            <td>{{ elem.tn12 }}</td>
+            <td>{{ elem.tx12 }}</td>
+            <td>{{ elem.tminsol }}</td>
+            <td>{{ elem.raf10 }}</td>
+            <td>{{ elem.rafper }}</td>
+            <td>{{ elem.per }}</td>
+            <td>{{ elem.rr12 }}</td>
+            </tr>
+      </tbody>
+    </table>
+
+
+</div>
